@@ -1,36 +1,48 @@
 package com.isika.projet3.SmartImplant.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import java.util.Collection;
+import java.util.Collections;
 
 @Entity
-@Table(name = "user")
-public class User {
+@Table(name = "users")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
+public abstract class User implements UserDetails { // ✅ Implémentation de UserDetails pour Spring Security
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Integer id;
-    String nom;
-    String prenom;
-    String email;
-    String password;
-    String role;
 
+    private String name;
+
+    private String firstName;
+
+    private String email;
+
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role; // ✅ Ajout de @Column(nullable = false) pour éviter les valeurs null
+
+    // 🔹 Constructeurs
     public User() {
     }
 
-    public User(Integer id, String nom, String prenom, String email, String password, String role) {
+    public User(Integer id, String nom, String prenom, String email, String password, Role role) {
         this.id = id;
-        this.nom = nom;
-        this.prenom = prenom;
+        this.name = nom;
+        this.firstName = prenom;
         this.email = email;
         this.password = password;
         this.role = role;
     }
 
+    // 🔹 Getters et Setters
     public Integer getId() {
         return id;
     }
@@ -40,19 +52,19 @@ public class User {
     }
 
     public String getNom() {
-        return nom;
+        return name;
     }
 
     public void setNom(String nom) {
-        this.nom = nom;
+        this.name = nom;
     }
 
     public String getPrenom() {
-        return prenom;
+        return firstName;
     }
 
     public void setPrenom(String prenom) {
-        this.prenom = prenom;
+        this.firstName = prenom;
     }
 
     public String getEmail() {
@@ -71,73 +83,49 @@ public class User {
         this.password = password;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
+    // 🔹 Implémentation de UserDetails (Spring Security)
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((nom == null) ? 0 : nom.hashCode());
-        result = prime * result + ((prenom == null) ? 0 : prenom.hashCode());
-        result = prime * result + ((email == null) ? 0 : email.hashCode());
-        result = prime * result + ((password == null) ? 0 : password.hashCode());
-        result = prime * result + ((role == null) ? 0 : role.hashCode());
-        return result;
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        User other = (User) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        if (nom == null) {
-            if (other.nom != null)
-                return false;
-        } else if (!nom.equals(other.nom))
-            return false;
-        if (prenom == null) {
-            if (other.prenom != null)
-                return false;
-        } else if (!prenom.equals(other.prenom))
-            return false;
-        if (email == null) {
-            if (other.email != null)
-                return false;
-        } else if (!email.equals(other.email))
-            return false;
-        if (password == null) {
-            if (other.password != null)
-                return false;
-        } else if (!password.equals(other.password))
-            return false;
-        if (role == null) {
-            if (other.role != null)
-                return false;
-        } else if (!role.equals(other.role))
-            return false;
+    public String getUsername() {
+        return email; // 🔹 Utilisé pour l'authentification
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
-    public String toString() {
-        return "user [id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", email=" + email + ", password=" + password
-                + ", role=" + role + "]";
+    public boolean isAccountNonLocked() {
+        return true;
     }
 
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    // 🔹 Méthode toString améliorée
+    @Override
+    public String toString() {
+        return "User{id=" + id + ", nom='" + name + "', prenom='" + firstName + "', email='" + email + "', role=" + role
+                + "}";
+    }
 }
