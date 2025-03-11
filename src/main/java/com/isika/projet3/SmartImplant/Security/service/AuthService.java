@@ -1,4 +1,4 @@
-package com.isika.projet3.SmartImplant.service;
+package com.isika.projet3.SmartImplant.Security.service;
 
 import java.util.Collection;
 import java.util.Collections;

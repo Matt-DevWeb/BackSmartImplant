@@ -16,16 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.isika.projet3.SmartImplant.dto.AuthResponseDTO;
 import com.isika.projet3.SmartImplant.dto.LoginDTO;
 import com.isika.projet3.SmartImplant.dto.RegisterDTO;
-import com.isika.projet3.SmartImplant.jwt.JWTGenerator;
 import com.isika.projet3.SmartImplant.models.Dentist;
 import com.isika.projet3.SmartImplant.models.Patient;
 import com.isika.projet3.SmartImplant.models.Role;
 import com.isika.projet3.SmartImplant.models.User;
 import com.isika.projet3.SmartImplant.repository.UserRepository;
+import com.isika.projet3.SmartImplant.Security.jwt.JWTGenerator;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin("http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class AuthController {
 
     private final UserRepository userRepository;
@@ -76,4 +76,5 @@ public class AuthController {
 
         return new ResponseEntity<>(new AuthResponseDTO(token), HttpStatus.OK);
     }
+
 }

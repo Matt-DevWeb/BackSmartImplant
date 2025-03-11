@@ -1,4 +1,4 @@
-package com.isika.projet3.SmartImplant.jwt;
+package com.isika.projet3.SmartImplant.Security.jwt;
 
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;

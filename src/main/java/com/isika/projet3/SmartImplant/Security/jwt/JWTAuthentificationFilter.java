@@ -1,4 +1,4 @@
-package com.isika.projet3.SmartImplant.jwt;
+package com.isika.projet3.SmartImplant.Security.jwt;
 
 import java.io.IOException;
 
@@ -10,7 +10,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.isika.projet3.SmartImplant.service.AuthService;
+import com.isika.projet3.SmartImplant.Security.service.AuthService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
