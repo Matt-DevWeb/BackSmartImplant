@@ -7,7 +7,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,10 +23,15 @@ import com.isika.projet3.SmartImplant.models.User;
 import com.isika.projet3.SmartImplant.repository.UserRepository;
 import com.isika.projet3.SmartImplant.Security.jwt.JWTGenerator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+
 public class AuthController {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -42,27 +47,44 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterDTO registerDto) {
-        if (userRepository.existsByEmail(registerDto.getEmail())) {
-            return new ResponseEntity<>("Username is already taken!", HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> register(@RequestBody RegisterDTO registerDto) {
+        try {
+            // 1. Vérifie si l'email existe déjà
+            if (userRepository.existsByEmail(registerDto.getEmail())) {
+                return ResponseEntity.badRequest().body("Email déjà utilisé");
+            }
+
+            // 2. Convertit la String en enum Role
+            Role userRole;
+            try {
+                userRole = Role.valueOf(registerDto.getRole().name().toUpperCase());
+            } catch (IllegalArgumentException e) {
+                return ResponseEntity.badRequest().body("Rôle invalide");
+            }
+
+            // 3. Crée l'utilisateur selon le rôle
+            User user = switch (userRole) {
+                case DENTIST -> new Dentist();
+                case PATIENT -> new Patient();
+
+                default -> throw new IllegalArgumentException("Rôle non géré");
+            };
+
+            // 4. Hydrate l'utilisateur
+            user.setEmail(registerDto.getEmail());
+            user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
+            user.setRole(userRole);
+
+            // 5. Sauvegarde en base
+            userRepository.save(user);
+
+            return ResponseEntity.ok("Inscription réussie");
+
+        } catch (Exception e) {
+            // ✅ Logge l'erreur complète pour le débogage
+            logger.error("Erreur lors de l'inscription", e);
+            return ResponseEntity.internalServerError().body("Erreur technique");
         }
-
-        User user;
-        if (registerDto.getRole() == Role.DENTIST) {
-            user = new Dentist();
-        } else if (registerDto.getRole() == Role.PATIENT) {
-            user = new Patient();
-        } else {
-            return new ResponseEntity<>("Invalid role!", HttpStatus.BAD_REQUEST);
-        }
-
-        user.setEmail(registerDto.getEmail());
-        user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
-        user.setRole(registerDto.getRole());
-
-        userRepository.save(user);
-
-        return new ResponseEntity<>("User registered successfully!", HttpStatus.OK);
     }
 
     @PostMapping("/login")
