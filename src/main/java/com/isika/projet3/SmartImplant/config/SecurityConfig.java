@@ -32,6 +32,11 @@ public class SecurityConfig {
                         .requestMatchers("/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/patients/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/patients/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/dentists/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/dentists/**").permitAll()
+
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 

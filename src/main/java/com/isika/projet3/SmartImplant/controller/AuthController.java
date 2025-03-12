@@ -28,7 +28,6 @@ import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/api/auth")
-
 public class AuthController {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
@@ -66,7 +65,6 @@ public class AuthController {
             User user = switch (userRole) {
                 case DENTIST -> new Dentist();
                 case PATIENT -> new Patient();
-
                 default -> throw new IllegalArgumentException("Rôle non géré");
             };
 
@@ -98,5 +96,4 @@ public class AuthController {
 
         return new ResponseEntity<>(new AuthResponseDTO(token), HttpStatus.OK);
     }
-
 }

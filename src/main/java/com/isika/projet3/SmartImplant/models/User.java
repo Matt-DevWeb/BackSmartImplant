@@ -51,19 +51,19 @@ public abstract class User implements UserDetails { // ✅ Implémentation de Us
         this.id = id;
     }
 
-    public String getNom() {
+    public String getName() {
         return name;
     }
 
-    public void setNom(String nom) {
+    public void setName(String nom) {
         this.name = nom;
     }
 
-    public String getPrenom() {
+    public String getFirstName() {
         return firstName;
     }
 
-    public void setPrenom(String prenom) {
+    public void setFirstName(String prenom) {
         this.firstName = prenom;
     }
 
