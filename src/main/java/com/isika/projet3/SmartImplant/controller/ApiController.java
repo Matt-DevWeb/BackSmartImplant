@@ -1,4 +1,4 @@
-package com.isika.projet3.SmartImplant;
+package com.isika.projet3.SmartImplant.controller;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import com.isika.projet3.SmartImplant.models.Patient;
 
 @RestController
 @RequestMapping("/api")
-public class ApiConfig {
+public class ApiController {
 
     @GetMapping("/patient")
     public ResponseEntity<List<Patient>> getPatients() {
