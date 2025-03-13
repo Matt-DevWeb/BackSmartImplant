@@ -1,7 +1,5 @@
 package com.isika.projet3.SmartImplant.dto;
 
-import com.isika.projet3.SmartImplant.models.Role;
-
 public class AuthResponseDTO {
 
     private String accestoken;

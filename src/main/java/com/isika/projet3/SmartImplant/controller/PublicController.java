@@ -10,7 +10,7 @@ public class PublicController {
 
     @GetMapping("/all")
     public ResponseEntity<String> getPublicContent() {
-        String publicContent = "Contenu public accessible à tous";
+        String publicContent = "HOME PAGE";
         return new ResponseEntity<>(publicContent, HttpStatus.OK);
     }
 }
