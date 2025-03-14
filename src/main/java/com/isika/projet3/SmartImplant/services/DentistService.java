@@ -28,15 +28,48 @@ public class DentistService {
     }
 
     public Optional<Dentist> updateDentist(Integer id, Dentist dentistDetails) {
-        return dentistRepository.findById(id).map(dentist -> {
-            dentist.setName(dentistDetails.getName());
-            dentist.setFirstName(dentistDetails.getFirstName());
-            dentist.setEmail(dentistDetails.getEmail());
-            dentist.setPassword(dentistDetails.getPassword());
-            dentist.setRole(dentistDetails.getRole());
-            // Si d'autres champs spécifiques existent, les mettre à jour ici.
-            return dentistRepository.save(dentist);
-        });
+        try {
+            return dentistRepository.findById(id).map(dentist -> {
+                // Mise à jour conditionnelle des champs
+                if (dentistDetails.getName() != null) {
+                    dentist.setName(dentistDetails.getName());
+                }
+                if (dentistDetails.getFirstName() != null) {
+                    dentist.setFirstName(dentistDetails.getFirstName());
+                }
+                if (dentistDetails.getEmail() != null) {
+                    dentist.setEmail(dentistDetails.getEmail());
+                }
+                if (dentistDetails.getPassword() != null && !dentistDetails.getPassword().isEmpty()) {
+                    dentist.setPassword(dentistDetails.getPassword());
+                }
+                if (dentistDetails.getRole() != null) {
+                    dentist.setRole(dentistDetails.getRole());
+                }
+
+                // Mise à jour des champs spécifiques au dentiste
+                if (dentistDetails.getPhone() != null) {
+                    dentist.setPhone(dentistDetails.getPhone());
+                }
+                if (dentistDetails.getAddress() != null) {
+                    dentist.setAddress(dentistDetails.getAddress());
+                }
+                if (dentistDetails.getLicenseNumber() != null) {
+                    dentist.setLicenseNumber(dentistDetails.getLicenseNumber());
+                }
+                if (dentistDetails.getSpecialization() != null) {
+                    dentist.setSpecialization(dentistDetails.getSpecialization());
+                }
+                if (dentistDetails.getClinicName() != null) {
+                    dentist.setClinicName(dentistDetails.getClinicName());
+                }
+
+                return dentistRepository.save(dentist);
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     public boolean deleteDentist(Integer id) {
