@@ -1,57 +1,73 @@
 package com.isika.projet3.SmartImplant.Appointment;
-// package com.isika.projet3.SmartImplant.models;
 
-// import java.time.LocalDateTime;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
-// import jakarta.persistence.Entity;
-// import jakarta.persistence.GeneratedValue;
-// import jakarta.persistence.GenerationType;
-// import jakarta.persistence.Id;
-// import jakarta.persistence.ManyToOne;
+import com.isika.projet3.SmartImplant.models.Dentist;
+import com.isika.projet3.SmartImplant.models.Patient;
 
-// @Entity
-// public class Appointment {
-// @Id
-// @GeneratedValue(strategy = GenerationType.IDENTITY)
-// private Long id;
-// private LocalDateTime date;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
-// @ManyToOne
-// private Dentist dentist;
+@Entity
+public class Appointment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
+    private LocalDateTime date;
 
-// @ManyToOne
-// private Patient patient;
+    @ManyToOne
+    private Dentist dentist;
 
-// public Long getId() {
-// return id;
-// }
+    @ManyToOne
+    private Patient patient;
 
-// public void setId(Long id) {
-// this.id = id;
-// }
+    // Champ pour stocker les identifiants des documents associés (stockés dans
+    // MongoDB)
+    private List<UUID> documentIds = new ArrayList<>();
 
-// public LocalDateTime getDate() {
-// return date;
-// }
+    public UUID getId() {
+        return id;
+    }
 
-// public void setDate(LocalDateTime date) {
-// this.date = date;
-// }
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
-// public Dentist getDentist() {
-// return dentist;
-// }
+    public LocalDateTime getDate() {
+        return date;
+    }
 
-// public void setDentist(Dentist dentist) {
-// this.dentist = dentist;
-// }
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
 
-// public Patient getPatient() {
-// return patient;
-// }
+    public Dentist getDentist() {
+        return dentist;
+    }
 
-// public void setPatient(Patient patient) {
-// this.patient = patient;
-// }
+    public void setDentist(Dentist dentist) {
+        this.dentist = dentist;
+    }
 
-// }
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public List<UUID> getDocumentIds() {
+        return documentIds;
+    }
+
+    public void setDocumentIds(List<UUID> documentIds) {
+        this.documentIds = documentIds;
+    }
+}

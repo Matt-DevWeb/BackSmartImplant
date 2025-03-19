@@ -40,7 +40,7 @@ public class AuthService implements UserDetailsService { // ✅ Implémentation 
                 mapRoleToAuthorities(user.getRole()));
     }
 
-    private Collection<GrantedAuthority> mapRoleToAuthorities(Role role) {
+    private Collection<? extends GrantedAuthority> mapRoleToAuthorities(Role role) {
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 }

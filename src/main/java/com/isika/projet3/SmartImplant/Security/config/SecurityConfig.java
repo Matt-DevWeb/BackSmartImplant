@@ -1,4 +1,4 @@
-package com.isika.projet3.SmartImplant.config;
+package com.isika.projet3.SmartImplant.Security.config;
 
 import java.util.List;
 
